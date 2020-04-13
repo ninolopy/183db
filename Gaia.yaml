@@ -1,0 +1,129 @@
+- week: 1
+  goals:
+  - goal: A simulated world which we can add our robot to.  
+    tasks:
+      - Create GUI environment that we will add robot to in the future.
+      - Integrate time-of-day display functionality into this environment. Display the simulated time in the environment window.
+    deliverable: Video demonstrating our simulation
+    points: 7
+  - goal: Mathematical modeling of the state space equations of our robot
+    tasks:
+    - Calculate the sun's angle
+    deliverable: Document outlining the calculation of sun angle
+    points: 3
+- week: 2
+  goals:
+  - goal: A simulated world which contains a light source.
+    tasks: 
+    - Add video streaming support to the user interface
+    - Add timestamp upload to the user interface
+    deliverable: Demonstration of light source moving based on time of day.
+    points: 7
+  - goal: A simulated world who's light souce change based on the time of day. 
+    tasks:
+    - Move the sun based on the current time.
+    deliverable: Demonstration of simulation taking timestamp to position of the sun. 
+    points: 3
+- week: 3
+  goals:
+  - goal: A simulated world that contains a plant which uses positional light data to know if it is in the sun or not.
+    tasks:
+    - Mathematically model if plants are in the sun or not
+    - Show an image of plant in simulation
+    deliverable: Video demonstrating simulation of plants.
+    points: 6
+  - goal: A plant which knows how long it's been in the sun throughout the day.
+    tasks:
+    - Log plant sun collection to a file.
+    deliverable: Sun collection data from plants
+    points: 4
+- week: 4
+  goals:
+  - goal: A simulated world that contains objects which can make shade.
+    tasks:
+    - Calculate which portion of the simulation world is in the sun given the position of an object and the angle of the sun
+    deliverable: Sun collection data over the course of a day with and object placed above the plant
+    points: 7
+  - goal: Track the change of shade over time as sun's position changes.
+    tasks:
+    - Create video which shows object blocking sun from plants.
+    deliverable: Video showing an object blocking sun from plants.
+    points: 3
+- week: 5
+  goals:
+  - goal: A mathematical model which describes a servo motor.
+    tasks:
+    - Create mathematical model to model real servo motors
+    - Create interface which allows this to be modified to support any servo model.
+    deliverable: Description of mathematical model
+    points: 3
+  - goal: A simulation which contains a mathematically modelled servo motor.
+    tasks:
+    - Simulate servo response given different input signals
+    - Simulate uncertainty in servo response
+    deliverable: Presentation explaining how we designed virtual servo motors to be close to real world. Description of input response and error modeling.
+    points: 7
+- week: 6
+  goals:
+  - goal: A mathematical model which describes our sun sensors.
+    tasks: 
+    - Make a mathematical model that adds realistic error for our sensors.
+    - Create interface which allows this to be modified to support any sensor model.
+    deliverable: Mathematical model which will take in the desired angle of the arm and produce actuator inputs
+    points: 3
+  - goal: Add robot in our simulation which is composed of a base, a servo motor, and an arm
+    tasks:
+    - Add arms to simulation world that can connect to our servo motors.
+    deliverable: Video of our motor and arms working in the simulation.
+    points: 7
+- week: 7
+  goals:
+  - goal: A fully completed virtual robot as we defined in our project proposal.
+    tasks:
+    - Demonstrate all working moving components in conjunction. 
+    - integrate full functionality for all of the in-simulation components of robot
+    - Test that shading is working correctly
+    deliverable: Video of all working components in simulation operating simultaneously
+    points: 7
+  - goal: A mathematical model to map umbrella position to servo angles.
+    tasks:
+    - Create mathematical model that maps umbrella position as input and maps these to servo angles
+    - Integrate this model with model that maps actuator controls to servo angle. 
+    deliverable: Mathematical model which will take in position of the umbreall and produce ctuator inputs for both servo motors.
+    points: 3
+- week: 8
+  goals:
+  - goal: A data set of pictures of plants in sun and plants out of sun
+    tasks:
+    - Take pictures of plants lit and in shade
+    - Label images we took
+    deliverable: Presentation showing results of data collection
+    points: 5
+  - goal: Create classification model that is trained on dataset to determine if plants are in sun
+    tasks:
+    - Build a classification model
+    - Test our classification model
+    deliverable: Presentation showing results of our classification model. 
+    points: 5
+- week: 9
+  goals:
+  - goal: Combine camera feed data and sun sensor data
+    tasks: 
+    - Design a filter to combine data from sun sensors and camera
+    - Label all images
+    - Design and conduct tests to determine accuracu of sensor vs camera + sensors model
+    deliverable: Presentation showing results using camera in conjunction with the sun sensors to determine if the plant is in the sun.
+    points: 5
+  - goal: Testing framework.
+    tasks: 
+    - Come up with a good way to test our system
+    - Build a framework which allows us to easily test our system based on the tests we decided in task 1.
+    deliverable: Presentation showing results from our tests carried out by our testing framework.
+    points: 5
+- week: 10
+  goals:
+  - goal: A final presentation.
+    tasks:
+    - Create a final presentation for our project.
+    deliverable: Presentation showing our completed robot and the results of our tests.
+    points: 10  
