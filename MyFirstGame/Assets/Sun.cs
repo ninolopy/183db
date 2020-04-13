@@ -31,7 +31,7 @@ public class Sun : MonoBehaviour
         date = GlobalClock.GetTime();
         updatePosition(date);
         IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, 34, 118);
-        Debug.Log(date);
+        //Debug.Log(date);
         
     }
 
