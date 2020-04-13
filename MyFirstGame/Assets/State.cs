@@ -97,7 +97,7 @@ public class State : MonoBehaviour
         }
         x = stateUpdate;
         
-        Debug.Log("Theta = " + x[0] + " Phi = " + x[1]) ;
+        //Debug.Log("Theta = " + x[0] + " Phi = " + x[1]) ;
     }
 
     public float get_theta(){
