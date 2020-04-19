@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEditor;
 
 public class Plant : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject sun; 
+    public Clock GlobalClock;
     public Vector3 sunPosition; 
     public Vector3 plantPosition; 
 
     void Start()
     {
+        GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
         sunPosition = sun.transform.position;
         plantPosition =  transform.position; 
     }
@@ -28,18 +32,28 @@ public class Plant : MonoBehaviour
 
         RaycastHit hitinfo; 
 
+        System.DateTime Time = GlobalClock.GetTime();
         if(Physics.Raycast(sunPosition,rayDirection,out hitinfo)){
             if(hitinfo.collider.tag == "Ground"){
+                WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Not Sunny");
                 return false;
             }
             else if(hitinfo.collider.tag == "Plant"){
+                WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Sunny");
                 return true; 
             }
         } 
-        else{
-            Debug.Log("NO COLLISIONS!!");
-            return false; 
-        }
-        return false;
+        Debug.Log("NO COLLISIONS!!");
+        WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Not Sunny");
+        return false; 
+    }
+    static void WriteString(string s)
+    {
+        string path = "Assets/logs/test.txt";
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine(s);
+        writer.Close();
     }
 }
