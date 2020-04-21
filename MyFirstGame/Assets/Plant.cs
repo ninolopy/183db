@@ -22,7 +22,7 @@ public class Plant : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("is_sunny returns:" + is_sunny());
+        //Debug.Log("is_sunny returns:" + is_sunny());
         // Calc angle between sun and plants
     }
 
