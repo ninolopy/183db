@@ -141,9 +141,9 @@ public class State : MonoBehaviour
         p = (i-k*h)*p;
         
 
-        Debug.Log("xHat[0]= " + xHat[0] + " xHat[1]= " + xHat[1] + " xHat[2]= " + xHat[2] + " xHat[3]= " + xHat[3] );
-        Debug.Log("x[0]= " + x[0] + " x[1]= " + x[1] + " x[2]= " + x[2] + " x[3]= " + x[3] );
-        Debug.Log("p[0][0]= " + p[0,0] + " p[1][1]= " + p[1,1] + " p[2][2]= " + p[2,2] + " p[3][3]= " + p[3,3]);
+        //Debug.Log("xHat[0]= " + xHat[0] + " xHat[1]= " + xHat[1] + " xHat[2]= " + xHat[2] + " xHat[3]= " + xHat[3] );
+        //Debug.Log("x[0]= " + x[0] + " x[1]= " + x[1] + " x[2]= " + x[2] + " x[3]= " + x[3] );
+        //Debug.Log("p[0][0]= " + p[0,0] + " p[1][1]= " + p[1,1] + " p[2][2]= " + p[2,2] + " p[3][3]= " + p[3,3]);
 
     }
 
