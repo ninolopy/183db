@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -96,5 +97,17 @@ public class Motor : MonoBehaviour
         internal_omega_   = o_t;
         // GLOBAL VARIABLE SET
         output_omega=internal_omega_ / Constants.gear_ratio;
+        string output = internal_current_ + " " + internal_omega_ + " " + output_omega;
+        WriteString(output);
+    }
+
+    static void WriteString(string s)
+    {
+        string path = "Assets/logs/motor_output.txt";
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine(s);
+        writer.Close();
     }
 }
