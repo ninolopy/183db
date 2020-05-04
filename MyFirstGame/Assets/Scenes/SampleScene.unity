@@ -152,6 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_angle: 0
   min_angle: 0
+  baseMotor: {fileID: 0}
+  umbrellaMotor: {fileID: 2096693112}
 --- !u!4 &43704089
 Transform:
   m_ObjectHideFlags: 0
@@ -1465,6 +1467,10 @@ MonoBehaviour:
   internal_current_: 0
   internal_omega_: 0
   output_omega: 0
+  torque: 0
+  currState: {fileID: 43704088}
+  max_angle: 0
+  min_angle: 0
 --- !u!4 &2096693113
 Transform:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -11,6 +10,10 @@ public class Motor : MonoBehaviour
     public double internal_current_; 
     public double internal_omega_; 
     public double output_omega; 
+    public double torque;  
+    public State currState; 
+    public float max_angle; 
+    public float min_angle; 
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +23,15 @@ public class Motor : MonoBehaviour
         internal_current_ = 0;
         internal_omega_ = 0;
         output_omega = 0; 
+        torque = 0; 
+
+        float diameter = Constants.UMBRELLA_DIAMETER;
+        float pole_length = Constants.POLE_LENGTH; 
+
+        min_angle = (float)((System.Math.Atan(((diameter/2)/pole_length)))*(180/3.1415))-90; //Degrees
+        max_angle = (float)(-min_angle);
+
+
     }
 
     // Update is called once per frame
@@ -34,14 +46,25 @@ public class Motor : MonoBehaviour
         input_ = -1.0;
     }
 
-    motorModelUpdate(output_omega); 
-    print_ang_velocity(); 
+    
+    motorModelUpdate(false,output_omega,calculateExternalTorque(false));
+
     }
 
-    public void print_ang_velocity(){
-        Debug.Log("output shaft omega= " + output_omega); 
+    public double get_ang_velocity(){
+        //Debug.Log("output shaft omega= " + output_omega); 
+        return output_omega; 
     }
 
+
+
+    public double get_inertia(bool is_baseplate){
+        
+        if(is_baseplate){
+            return Constants.moment_of_inertia + ((1/3.0)*Constants.POLE_MASS*System.Math.Pow(Constants.POLE_LENGTH*System.Math.Sin(System.Math.Abs(currState.get_phi())*3.14/180.0),2) + Constants.UMBRELLA_MASS*System.Math.Pow(Constants.POLE_LENGTH*System.Math.Sin(System.Math.Abs(currState.get_phi())*3.14/180.0),2))/System.Math.Pow(Constants.gear_ratio,2);
+        }
+        return Constants.moment_of_inertia + ((1/3.0)*Constants.POLE_MASS*System.Math.Pow(Constants.POLE_LENGTH,2) + Constants.UMBRELLA_MASS*System.Math.Pow(Constants.POLE_LENGTH,2))/System.Math.Pow(Constants.gear_ratio,2); 
+    }
 
     // CONTROL MOTOR WITH UP AND DOWN KEY
     public void getUserInput(){
@@ -50,32 +73,62 @@ public class Motor : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.UpArrow)){
              // Umbrella up
-            input_ = 1; 
+            if(currState.get_phi()>=max_angle){
+                 input_ = 0; 
+                 output_omega = 0; 
+            }
+            else{
+                input_ = 1;
+            } 
         }
         else if (Input.GetKey(KeyCode.DownArrow)){
              // Umbrella down
-            input_ = -1;
+            if(currState.get_phi()<=min_angle){
+                input_ = 0; 
+                output_omega = 0; 
+            }
+            else {
+                input_ = -1;
+            }
         }
         else{
             input_ = 0; 
         }
     }
 
+    public double calculateExternalTorque(bool is_baseplate){
+        //using gravitational constant g= 9.81 m/sec^2
+        if(currState.get_phi()<=min_angle){
+            return 0; 
+        }
+        else if(currState.get_phi()>=max_angle){
+            return 0; 
+        }
+        else if(is_baseplate){
+            return 0; 
+        }
+        double external_torque = (Constants.POLE_LENGTH/2)*Constants.POLE_MASS*9.81*System.Math.Sin((currState.get_phi())*3.14/180.0) + Constants.POLE_LENGTH * Constants.UMBRELLA_MASS * 9.81*System.Math.Sin((currState.get_phi())*3.14/180.0); 
+        //Debug.Log("External torque= " + external_torque); 
+        return external_torque;
+    }
 
-    public void motorModelUpdate(double output_shaft_omega){
-        //double T = actual_load_torque / gear_ratio_; // external loading torque converted to internal side
-        double T = 0; 
+    // public double get_omega(bool is_baseplate){
+        
+    // }
+    public void motorModelUpdate(bool is_baseplate, double output_shaft_omega, double actual_load_torque){
+        //ADD THE EXTERNAL TORQUE
+        
+        double T = -actual_load_torque / Constants.gear_ratio; // external loading torque converted to internal side 
+        //double T = 0; 
         double V = input_ * Constants.motor_nominal_voltage; // input voltage (command input for motor velocity)
-        //Constant motor input 
-        //double V = -24; 
-
         internal_omega_ = output_shaft_omega * Constants.gear_ratio; // external shaft angular veloc. converted to internal side
-
         const double d = Constants.armature_damping_ratio;
         const double L = Constants.electric_inductance;
         const double R = Constants.electric_resistance;
         const double Km = Constants.electromotive_force_constant;
-        const double J = Constants.moment_of_inertia;
+        double J = get_inertia(is_baseplate);
+        //double J = Constants.moment_of_inertia;
+        //Debug.Log("Inertia= " + J); 
         double dt = Time.deltaTime;
         double i0 = internal_current_;
         double o0 = internal_omega_;
@@ -97,17 +150,6 @@ public class Motor : MonoBehaviour
         internal_omega_   = o_t;
         // GLOBAL VARIABLE SET
         output_omega=internal_omega_ / Constants.gear_ratio;
-        string output = internal_current_ + " " + internal_omega_ + " " + output_omega;
-        WriteString(output);
-    }
-
-    static void WriteString(string s)
-    {
-        string path = "Assets/logs/motor_output.txt";
-
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine(s);
-        writer.Close();
+        torque = Km*i_t*Constants.gear_ratio;
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MathNet.Numerics.LinearAlgebra;
+using System.IO;
+
 
 public class State : MonoBehaviour
 {
@@ -32,7 +34,10 @@ public class State : MonoBehaviour
     public float max_angle; 
     public float min_angle; 
     public System.Random rand; 
+    public Motor baseMotor; 
+    public Motor umbrellaMotor; 
     // Start is called before the first frame update
+
     void Start()
     {
         x = Vector<float>.Build.Dense(4); 
@@ -103,7 +108,10 @@ public class State : MonoBehaviour
 
     void Update()
     {
+        //THIS WAS REPLACED!!
         getUserInput(); 
+        //getUserInputMotorModel(); 
+
         trueStateUpdate();
 
         // STATE UPDATE
@@ -140,9 +148,10 @@ public class State : MonoBehaviour
  
         p = (i-k*h)*p;
         
+        
 
-        //Debug.Log("xHat[0]= " + xHat[0] + " xHat[1]= " + xHat[1] + " xHat[2]= " + xHat[2] + " xHat[3]= " + xHat[3] );
-        //Debug.Log("x[0]= " + x[0] + " x[1]= " + x[1] + " x[2]= " + x[2] + " x[3]= " + x[3] );
+        WriteString( x[0] + " " + x[1] + " " + xHat[0]  + " "  + xHat[1] );
+        //Debug.Log("x[0]= " + x[0] + " x[1]= " + x[1] );
         //Debug.Log("p[0][0]= " + p[0,0] + " p[1][1]= " + p[1,1] + " p[2][2]= " + p[2,2] + " p[3][3]= " + p[3,3]);
 
     }
@@ -153,6 +162,29 @@ public class State : MonoBehaviour
         double randStdNormal = System.Math.Sqrt(-2.0 * System.Math.Log(u1)) * System.Math.Sin(2.0 * System.Math.PI * u2); //random normal(0,1)
         double randNormal = mean + stdDev * randStdNormal; //random normal(mean,stdDev^2)
         return (float) randNormal; 
+    }
+
+    public void getUserInputMotorModel(){
+        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow)){
+            u[0] = 0; 
+            uHat[0] = 0; 
+        }
+        else if (Input.GetKey(KeyCode.RightArrow)){
+             // Turn Clockwise 
+             u[0] = Constants.MAX_SPEED; 
+             uHat[0] = Constants.MAX_SPEED; 
+        } 
+        else if (Input.GetKey(KeyCode.LeftArrow)){
+             // Turn CounterClockwise
+             u[0] = -Constants.MAX_SPEED; 
+             uHat[0] = -Constants.MAX_SPEED;             
+        }
+        else{
+            u[0] = 0; 
+            uHat[0] = 0; 
+        }
+
+        u[1] = (float)umbrellaMotor.get_ang_velocity(); 
     }
 
 
@@ -263,6 +295,7 @@ public class State : MonoBehaviour
     }
 
     public float get_phi(){
+        //Debug.Log("Phi = "+x[1]); 
         return x[1]; 
     }
 
@@ -274,4 +307,13 @@ public class State : MonoBehaviour
         return x[3]; 
     }
 
+
+    static void WriteString(string s){
+        string path = "Assets/logs/kalman.txt";
+
+        //Write some text to the test.txt file
+        StreamWriter writer = new StreamWriter(path, true);
+        writer.WriteLine(s);
+        writer.Close();
+    }
 }
