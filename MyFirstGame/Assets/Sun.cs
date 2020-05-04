@@ -37,7 +37,7 @@ public class Sun : MonoBehaviour
 
     void updatePosition(System.DateTime date) {
         IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, 34, 118);
-        float X = (float)(sunDistance * System.Math.Cos(result["azimuth"]));
+        float X = (float)(sunDistance *System.Math.Cos(result["azimuth"]));
         float Y = (float)(sunDistance * System.Math.Sin(result["azimuth"]));
         float Z = (float)(sunDistance * System.Math.Sin(result["altitude"]));
         transform.position = new Vector3(X, Y, Z);

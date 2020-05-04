@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Constants 
 {
-    public const float UMBRELLA_DIAMETER = 1.5f; 
+    public const float UMBRELLA_DIAMETER = 1.5f;
+    public const float UMBRELLA_MASS = 3.0f; //3kg 
     public const float POLE_LENGTH = 2.0f; 
+    public const float POLE_MASS = 4.0f; // 4kg  
     public const float MAX_SPEED = 30; 
     public const float stdDevThetaDot = 2; // degrees per second
     public const float stdDevPhiDot = 2; //degrees per second
@@ -28,7 +30,7 @@ public class Constants
 
     // motor model
     public const double motor_nominal_voltage= 24.0; // Volts
-    public const double moment_of_inertia= 0.001; // kgm^2
+    public const double moment_of_inertia= 0.001; // kgm^2 THIS IS THE INERTIA OF THE MOTOR BIT ALONE
     public const double armature_damping_ratio= 0.0001; // Nm/(rad/s)
     public const double electromotive_force_constant= 0.08;  // Nm/A
     public const double electric_resistance= 1.0; // Ohm
