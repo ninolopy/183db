@@ -13,11 +13,12 @@ public class Sun : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sunDistance = 7;
+        sunDistance = 10;
         lighting = new GameObject("Lighting");
         Light lightComp = lighting.AddComponent<Light>();
         lightComp.color = Color.white;
         lightComp.intensity = 20;
+        lightComp.shadows = LightShadows.Soft;
         transform.position = new Vector3(1, 1, 1);
         lighting.transform.position = new Vector3(1, 1, 1);
 

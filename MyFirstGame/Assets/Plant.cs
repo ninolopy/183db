@@ -40,7 +40,7 @@ public class Plant : MonoBehaviour
             }
             else if(hitinfo.collider.tag == "Plant"){
                 WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Sunny");
-                return true; 
+                    return true; 
             }
         } 
         Debug.Log("NO COLLISIONS!!");
