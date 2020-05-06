@@ -7,6 +7,7 @@ TagManager:
   - Plant
   - Ground
   - SunSensor
+  - Sun
   layers:
   - Default
   - TransparentFX

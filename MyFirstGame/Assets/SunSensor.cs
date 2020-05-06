@@ -12,9 +12,14 @@ public class SunSensor : MonoBehaviour
     public Clock GlobalClock;
     public Vector3 sunPosition; 
     public Vector3 sensorPosition; 
+    public float LastReading;
+
+    static float SunIntensity = 1000f;
+
 
     void Start()
     {
+        LastReading = 0;
         GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
         sun = GameObject.Find("Sun").GetComponent(typeof(Sun)) as Sun;
         sunPosition = sun.transform.position;
@@ -24,11 +29,17 @@ public class SunSensor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        Debug.Log("is_sunny returns:" + is_sunny());
+        is_sunny();
+        //Debug.Log("is_sunny returns:" + is_sunny());
         // Calc angle between sun and plants
     }
 
+    public float solarIntensity() {
+        return LastReading;
+    }
+
     public bool is_sunny(){
+        LastReading = 0;
         sunPosition = sun.transform.position; 
         Vector3 rayDirection = sensorPosition - sunPosition; 
         RaycastHit hitinfo; 
@@ -37,12 +48,12 @@ public class SunSensor : MonoBehaviour
         if(Physics.Raycast(sunPosition,rayDirection,out hitinfo, 100000)){
             if(hitinfo.collider.tag == "Ground"){
                 Debug.Log(hitinfo.collider.tag);
-
-                WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Not Sunny");
                 return false;
             }
             else if(hitinfo.collider.tag == "SunSensor"){
-                WriteString("" + Time.Hour + ":" + Time.Minute + ":" + Time.Second + ":: Sunny");
+                float SolarIntensity = SunIntensity * 1.0f / (hitinfo.distance * hitinfo.distance);
+                WriteString(name + " " + SolarIntensity);
+                LastReading = SolarIntensity;
                 return true; 
             }
             else {
