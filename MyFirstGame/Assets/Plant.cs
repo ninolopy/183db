@@ -7,7 +7,7 @@ using UnityEditor;
 public class Plant : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject sun; 
+    public Sun sun; 
     public Clock GlobalClock;
     public Vector3 sunPosition; 
     public Vector3 plantPosition; 
@@ -15,6 +15,7 @@ public class Plant : MonoBehaviour
     void Start()
     {
         GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
+        sun = GameObject.Find("Sun").GetComponent(typeof(Sun)) as Sun;
         sunPosition = sun.transform.position;
         plantPosition =  transform.position; 
     }
