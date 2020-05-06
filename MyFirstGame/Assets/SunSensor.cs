@@ -47,7 +47,7 @@ public class SunSensor : MonoBehaviour
         System.DateTime Time = GlobalClock.GetTime();
         if(Physics.Raycast(sunPosition,rayDirection,out hitinfo, 100000)){
             if(hitinfo.collider.tag == "Ground"){
-                Debug.Log(hitinfo.collider.tag);
+                //Debug.Log(hitinfo.collider.tag);
                 return false;
             }
             else if(hitinfo.collider.tag == "SunSensor"){
@@ -55,9 +55,6 @@ public class SunSensor : MonoBehaviour
                 WriteString(name + " " + SolarIntensity);
                 LastReading = SolarIntensity;
                 return true; 
-            }
-            else {
-                Debug.Log(hitinfo.collider.tag);
             }
         } 
         //Debug.Log("NO COLLISIONS!!");
