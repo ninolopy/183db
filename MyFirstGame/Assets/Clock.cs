@@ -37,7 +37,7 @@ public class Clock : MonoBehaviour
             minute = 0;
         }
 
-        if (hour >= 23) {
+        if (hour >= 24) {
             hour = 0;
         }
     }
