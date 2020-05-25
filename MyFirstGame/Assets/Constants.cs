@@ -37,7 +37,7 @@ public class Constants
     public const double electric_inductance= 0.001; // Henry
     
     // transmission
-    public const double gear_ratio= 20.0; 
+    public const double gear_ratio= 400.0; 
     public const double joint_damping= 0.005; 
     public const double joint_friction=  0.01; 
     

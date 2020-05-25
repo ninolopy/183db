@@ -32,10 +32,15 @@ public class SunSensorController : MonoBehaviour
         // Debug.Log("SunSensor3 = " + SunSensor1.solarIntensity());
         // Debug.Log("SunSensor4 = " + SunSensor1.solarIntensity());
         if (average > 0) {
-            Debug.Log("Sunny" + average);
+            //it is sunny
+            //Debug.Log("Sunny");
+
+            return;
         }
         else {
-            Debug.Log("Not Sunny");
+            //it is not sunny
+            //Debug.Log("Not Sunny");
+            return;
         }
     }
 }

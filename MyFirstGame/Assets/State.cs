@@ -38,6 +38,9 @@ public class State : MonoBehaviour
     public Motor umbrellaMotor; 
     // Start is called before the first frame update
 
+    private Clock GlobalClock;
+    private System.DateTime lastTime;
+
     void Start()
     {
         x = Vector<float>.Build.Dense(4); 
@@ -100,6 +103,9 @@ public class State : MonoBehaviour
         min_angle = (float)((System.Math.Atan(((diameter/2)/pole_length)))*(180/3.1415))-90; //Degrees
         max_angle = (float)(-min_angle);
         //Debug.Log("Min_Angle =" + min_angle + " Max_Angle=" + max_angle); 
+
+        GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
+        lastTime = GlobalClock.GetTime();
     }
 
     // Update is called once per frame
@@ -109,10 +115,16 @@ public class State : MonoBehaviour
     void Update()
     {
         //THIS WAS REPLACED!!
-        getUserInput(); 
-        //getUserInputMotorModel(); 
+        //getUserInput(); 
+        getUserInputMotorModel(); 
 
-        trueStateUpdate();
+
+        System.TimeSpan timeDiff = GlobalClock.GetTime() - lastTime;
+        float seconds = (float)timeDiff.TotalSeconds;
+        lastTime = GlobalClock.GetTime();
+
+        trueStateUpdate(Time.deltaTime);
+
 
         // STATE UPDATE
         Vector<float> dynamicsUpdate = Vector<float>.Build.Dense(4);
@@ -255,11 +267,11 @@ public class State : MonoBehaviour
 
 
 
-    public void trueStateUpdate(){
+    public void trueStateUpdate(float seconds){
         float thetaDotError = generate_gaussian(0,Constants.stdDevThetaDot);
         float phiDotError = generate_gaussian(0,Constants.stdDevPhiDot); 
-        float thetaError = thetaDotError*Time.deltaTime; 
-        float phiError = phiDotError*Time.deltaTime;
+        float thetaError = thetaDotError*seconds; 
+        float phiError = phiDotError*seconds;
         
         if(x[1]<=min_angle && u[1] == 0){
             if(phiDotError<0){
@@ -276,8 +288,8 @@ public class State : MonoBehaviour
         }
 
         Vector<float> stateUpdate = Vector<float>.Build.Dense(4);
-        stateUpdate[0] = x[0] + Time.deltaTime*u[0] + thetaError;
-        stateUpdate[1] = x[1] + Time.deltaTime*u[1] + phiError;
+        stateUpdate[0] = x[0] + seconds*u[0] + thetaError;
+        stateUpdate[1] = x[1] + seconds*u[1] + phiError;
         stateUpdate[2] = u[0] + thetaDotError;
         stateUpdate[3] = u[1] + phiDotError;
 

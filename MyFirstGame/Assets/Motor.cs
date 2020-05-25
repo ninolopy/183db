@@ -14,11 +14,14 @@ public class Motor : MonoBehaviour
     public State currState; 
     public float max_angle; 
     public float min_angle; 
+    PID PIDController;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        input_ = 0;
+        // input_ = 0;
+        input_ = -1;
         encoder_counter_ = 0;
         internal_current_ = 0;
         internal_omega_ = 0;
@@ -31,6 +34,7 @@ public class Motor : MonoBehaviour
         min_angle = (float)((System.Math.Atan(((diameter/2)/pole_length)))*(180/3.1415))-90; //Degrees
         max_angle = (float)(-min_angle);
 
+        PIDController = GameObject.Find("PID").GetComponent(typeof(PID)) as PID;
 
     }
 
@@ -38,13 +42,16 @@ public class Motor : MonoBehaviour
     void Update()
     {
     
-    getUserInput() ; 
+    //getUserInput() ; 
+    getPIDInput();
     
-    if (input_ > 1.0) {
-        input_ = 1.0;
-    } else if (input_ < -1.0) {
-        input_ = -1.0;
-    }
+    // if (input_ > 1.0) {
+    //     input_ = 1.0;
+    // } else if (input_ < -1.0) {
+    //     input_ = -1.0;
+    // }
+
+    // input_ = 1.0;
 
     
     motorModelUpdate(false,output_omega,calculateExternalTorque(false));
@@ -66,35 +73,39 @@ public class Motor : MonoBehaviour
         return Constants.moment_of_inertia + ((1/3.0)*Constants.POLE_MASS*System.Math.Pow(Constants.POLE_LENGTH,2) + Constants.UMBRELLA_MASS*System.Math.Pow(Constants.POLE_LENGTH,2))/System.Math.Pow(Constants.gear_ratio,2); 
     }
 
-    // CONTROL MOTOR WITH UP AND DOWN KEY
-    public void getUserInput(){
-        if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow)){
-            input_ = 0;  
-        }
-        else if (Input.GetKey(KeyCode.UpArrow)){
-             // Umbrella up
-            if(currState.get_phi()>=max_angle){
-                 input_ = 0; 
-                 output_omega = 0; 
-            }
-            else{
-                input_ = 1;
-            } 
-        }
-        else if (Input.GetKey(KeyCode.DownArrow)){
-             // Umbrella down
-            if(currState.get_phi()<=min_angle){
-                input_ = 0; 
-                output_omega = 0; 
-            }
-            else {
-                input_ = -1;
-            }
-        }
-        else{
-            input_ = 0; 
-        }
+    public void getPIDInput() {
+
     }
+
+    // CONTROL MOTOR WITH UP AND DOWN KEY
+    // public void getUserInput(){
+    //     if (Input.GetKey(KeyCode.UpArrow) && Input.GetKey(KeyCode.DownArrow)){
+    //         input_ = 0;  
+    //     }
+    //     else if (Input.GetKey(KeyCode.UpArrow)){
+    //          // Umbrella up
+    //         if(currState.get_phi()>=max_angle){
+    //              input_ = 0; 
+    //              output_omega = 0; 
+    //         }
+    //         else{
+    //             input_ = 1;
+    //         } 
+    //     }
+    //     else if (Input.GetKey(KeyCode.DownArrow)){
+    //          // Umbrella down
+    //         if(currState.get_phi()<=min_angle){
+    //             input_ = 0; 
+    //             output_omega = 0; 
+    //         }
+    //         else {
+    //             input_ = -1;
+    //         }
+    //     }
+    //     else{
+    //         input_ = 0; 
+    //     }
+    // }
 
     public double calculateExternalTorque(bool is_baseplate){
         //using gravitational constant g= 9.81 m/sec^2
@@ -120,7 +131,8 @@ public class Motor : MonoBehaviour
         
         double T = -actual_load_torque / Constants.gear_ratio; // external loading torque converted to internal side 
         //double T = 0; 
-        double V = input_ * Constants.motor_nominal_voltage; // input voltage (command input for motor velocity)
+        //double V = input_ * Constants.motor_nominal_voltage; // input voltage (command input for motor velocity)
+        double V = PIDController.getOutput();
         internal_omega_ = output_shaft_omega * Constants.gear_ratio; // external shaft angular veloc. converted to internal side
         const double d = Constants.armature_damping_ratio;
         const double L = Constants.electric_inductance;
