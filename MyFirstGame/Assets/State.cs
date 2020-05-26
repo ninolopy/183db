@@ -34,7 +34,7 @@ public class State : MonoBehaviour
     public float max_angle; 
     public float min_angle; 
     public System.Random rand; 
-    public Motor baseMotor; 
+    public Motor_Baseplate baseMotor; 
     public Motor umbrellaMotor; 
     // Start is called before the first frame update
 
@@ -177,25 +177,26 @@ public class State : MonoBehaviour
     }
 
     public void getUserInputMotorModel(){
-        if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow)){
-            u[0] = 0; 
-            uHat[0] = 0; 
-        }
-        else if (Input.GetKey(KeyCode.RightArrow)){
-             // Turn Clockwise 
-             u[0] = Constants.MAX_SPEED; 
-             uHat[0] = Constants.MAX_SPEED; 
-        } 
-        else if (Input.GetKey(KeyCode.LeftArrow)){
-             // Turn CounterClockwise
-             u[0] = -Constants.MAX_SPEED; 
-             uHat[0] = -Constants.MAX_SPEED;             
-        }
-        else{
-            u[0] = 0; 
-            uHat[0] = 0; 
-        }
+        // if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow)){
+        //     u[0] = 0; 
+        //     uHat[0] = 0; 
+        // }
+        // else if (Input.GetKey(KeyCode.RightArrow)){
+        //      // Turn Clockwise 
+        //      u[0] = Constants.MAX_SPEED; 
+        //      uHat[0] = Constants.MAX_SPEED; 
+        // } 
+        // else if (Input.GetKey(KeyCode.LeftArrow)){
+        //      // Turn CounterClockwise
+        //      u[0] = -Constants.MAX_SPEED; 
+        //      uHat[0] = -Constants.MAX_SPEED;             
+        // }
+        // else{
+        //     u[0] = 0; 
+        //     uHat[0] = 0; 
+        // }
 
+        u[0] = (float)baseMotor.get_ang_velocity(); 
         u[1] = (float)umbrellaMotor.get_ang_velocity(); 
     }
 

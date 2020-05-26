@@ -5,6 +5,9 @@ public class Sun : MonoBehaviour
 {
     float degrees;
     float azimuth;
+    float x; 
+    float y; 
+    float z; 
     double sunDistance;
     System.DateTime date;
     GameObject lighting;
@@ -21,7 +24,9 @@ public class Sun : MonoBehaviour
         lightComp.shadows = LightShadows.Soft;
         transform.position = new Vector3(1, 1, 1);
         lighting.transform.position = new Vector3(1, 1, 1);
-
+        x = 0; 
+        y = 0; 
+        z = 0; 
         GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
         date = GlobalClock.GetTime();
     }
@@ -38,12 +43,38 @@ public class Sun : MonoBehaviour
 
     void updatePosition(System.DateTime date) {
         IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, 34, 118);
-        float X = (float)(sunDistance *System.Math.Cos(result["azimuth"]));
-        float Y = (float)(sunDistance * System.Math.Sin(result["azimuth"]));
-        float Z = (float)(sunDistance * System.Math.Sin(result["altitude"]));
-        transform.position = new Vector3(X, Y, Z);
-        lighting.transform.position = new Vector3(X, Y, Z);
+        x = (float)(sunDistance *System.Math.Cos(result["azimuth"]));
+        y = (float)(sunDistance * System.Math.Sin(result["azimuth"]));
+        z = (float)(sunDistance * System.Math.Sin(result["altitude"]));
+        transform.position = new Vector3(x, y, z);
+        lighting.transform.position = new Vector3(x, y, z);
     }
+
+    public float getPhi(){ // Returns degrees
+        if(y<0){
+            return 60.0f; 
+        }
+        float phi =  (float)System.Math.Abs((System.Math.Atan(System.Math.Sqrt(((x-1.0)*(x-1.0) + (z+3.93)*(z+3.93)))/(y-.2))*180.0/System.Math.PI));
+        if(phi>60){
+            return 60.0f;
+        }
+        return phi; 
+    }
+
+    public float getTheta(){
+        Vector3 start = new Vector3(1.0f,2.16f,-3.93f); // Center of the baseplate
+        Vector3 sun = new Vector3(x,y,z); 
+        Vector3 dir = transform.InverseTransformDirection((sun-start));
+        float temp =  (float)(System.Math.Atan2(dir.x,dir.z)*Mathf.Rad2Deg);
+        Debug.Log("Sun Theta is" + temp);
+        return temp;
+        
+        //float theta = (float)(System.Math.Atan((z+3.93)/(x-1.0))*180/System.Math.PI)+90;
+
+        //Debug.Log("Sun Theta is" + theta); 
+        //return theta; 
+    }
+
 }
 
 //Reference: http://guideving.blogspot.com/2010/08/sun-position-in-c.html
