@@ -66,7 +66,7 @@ public class Sun : MonoBehaviour
         Vector3 sun = new Vector3(x,y,z); 
         Vector3 dir = transform.InverseTransformDirection((sun-start));
         float temp =  (float)(System.Math.Atan2(dir.x,dir.z)*Mathf.Rad2Deg);
-        Debug.Log("Sun Theta is" + temp);
+        // Debug.Log("Sun Theta is" + temp);
         return temp;
         
         //float theta = (float)(System.Math.Atan((z+3.93)/(x-1.0))*180/System.Math.PI)+90;

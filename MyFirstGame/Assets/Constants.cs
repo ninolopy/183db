@@ -17,6 +17,8 @@ public class Constants
     public const float sensorDevPhi = 10; 
     public const float sensorDevTheta = 10; 
 
+    public const int timeStepInSeconds = 20;
+
 
 
     // DC Motor simulation constants

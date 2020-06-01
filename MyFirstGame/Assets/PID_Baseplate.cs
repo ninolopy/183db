@@ -59,7 +59,7 @@ public class PID_Baseplate : MonoBehaviour
         //     goal += Mathf.Abs(goal - currState.get_phi());
         // } 
         
-        Debug.Log("Current Theta (from Kalman Filter) = " + currState.get_theta() + " Goal Theta = " +  goal);
+        // Debug.Log("Current Theta (from Kalman Filter) = " + currState.get_theta() + " Goal Theta = " +  goal);
         float state = currState.get_theta();
 
         float error = goal - currState.get_theta();

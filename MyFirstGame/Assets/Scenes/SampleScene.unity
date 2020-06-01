@@ -201,6 +201,10 @@ MonoBehaviour:
   SunSensor2: {fileID: 0}
   SunSensor3: {fileID: 0}
   SunSensor4: {fileID: 0}
+  armPID: {fileID: 0}
+  average: 0
+  secondsInSun: 0
+  threshold: 1000
 --- !u!4 &172972883
 Transform:
   m_ObjectHideFlags: 0

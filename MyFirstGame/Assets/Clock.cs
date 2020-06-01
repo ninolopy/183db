@@ -26,7 +26,7 @@ public class Clock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        second += 20;
+        second += Constants.timeStepInSeconds;
         if (second >= 60) {
             second = 0;
             minute += 1;

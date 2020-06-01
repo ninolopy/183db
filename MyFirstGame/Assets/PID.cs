@@ -16,7 +16,10 @@ public class PID : MonoBehaviour
     private float kd;
 
     private float maxError;
-    private float goal;
+    public float goal;
+    private float maxPhi;
+
+    private bool turnedOn;
 
     private Clock GlobalClock;
     private System.DateTime lastTime;
@@ -35,19 +38,29 @@ public class PID : MonoBehaviour
         kd = 7.0f;
 
         maxError = 2f;
-        goal = maxError;
+        
 
         GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
         sun = GameObject.Find("Sun").GetComponent(typeof(Sun)) as Sun; 
         lastTime = GlobalClock.GetTime();
         cheatRatio = 20;
+        turnedOn = false;
+        maxPhi = 48;
+        goal = -40;
     }
 
     void Update() {
+        if (!turnedOn) {
+            goal = -40;
+        }
+
         System.TimeSpan timeDiff = GlobalClock.GetTime() - lastTime;
         float seconds = (float)timeDiff.TotalSeconds;
         lastTime = GlobalClock.GetTime();
         
+        if (goal > maxPhi) {
+            goal = maxPhi;
+        }
         if(sun.getPhi()>goal & Mathf.Abs(goal- currState.get_phi()) < maxError){
             goal += Mathf.Min(maxError,Mathf.Abs(goal-sun.getPhi())); 
         } 
@@ -59,7 +72,7 @@ public class PID : MonoBehaviour
         //     goal += Mathf.Abs(goal - currState.get_phi());
         // } 
         
-        Debug.Log("Current Phi (from Kalman Filter) = " + currState.get_phi() + " Goal Phi = " +  goal);
+        // Debug.Log("Current Phi (from Kalman Filter) = " + currState.get_phi() + " Goal Phi = " +  goal);
         float state = currState.get_phi();
 
         float error = goal - currState.get_phi();
@@ -75,6 +88,11 @@ public class PID : MonoBehaviour
         WriteString(output.ToString());
 
         perviousError = error;
+    }
+
+    public void turnOn() {
+        turnedOn = true;
+        goal += sun.getPhi();
     }
 
     public double getOutput() {
