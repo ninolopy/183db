@@ -1,1 +1,1 @@
-Latitude:0 Longitude:0
+Latitude:-70 Longitude:0
