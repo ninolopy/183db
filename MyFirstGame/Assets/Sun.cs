@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System; 
+
 public class Sun : MonoBehaviour
 {
     float degrees;
@@ -9,6 +12,8 @@ public class Sun : MonoBehaviour
     float y; 
     float z; 
     double sunDistance;
+    double longitude; 
+    double latitude; 
     System.DateTime date;
     GameObject lighting;
     Clock GlobalClock;
@@ -29,6 +34,15 @@ public class Sun : MonoBehaviour
         z = 0; 
         GlobalClock = GameObject.Find("Global Clock").GetComponent(typeof(Clock)) as Clock;
         date = GlobalClock.GetTime();
+
+        //Process Location from file
+        
+        String s = readLocation(); 
+        String[] coords =  s.Split(' ');
+        latitude = Double.Parse(coords[0].Split(':')[1]);
+        longitude = Double.Parse(coords[1].Split(':')[1]);
+        Debug.Log("Latitude = " + latitude + " Longitude = " + longitude); 
+
     }
 
     // Update is called once per frame
@@ -36,13 +50,13 @@ public class Sun : MonoBehaviour
     {
         date = GlobalClock.GetTime();
         updatePosition(date);
-        IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, 34, 118);
+        IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, latitude, longitude);
         //Debug.Log(date);
         
     }
 
     void updatePosition(System.DateTime date) {
-        IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, 34, 118);
+        IDictionary<string, double> result = SunPosition.CalculateSunPosition(date, latitude, longitude);
         x = (float)(sunDistance *System.Math.Cos(result["azimuth"]));
         y = (float)(sunDistance * System.Math.Sin(result["azimuth"]));
         z = (float)(sunDistance * System.Math.Sin(result["altitude"]));
@@ -75,6 +89,14 @@ public class Sun : MonoBehaviour
         //return theta; 
     }
 
+    private static string readLocation(){
+        string path = "Assets/Demo_Input.txt";
+        //Write some text to the test.txt file
+        StreamReader reader = new StreamReader(path);
+        string s = reader.ReadLine();
+        reader.Close();
+        return s;  
+    }
 }
 
 //Reference: http://guideving.blogspot.com/2010/08/sun-position-in-c.html
@@ -210,4 +232,5 @@ public static class SunPosition
             return angleInRadians;  
         }  
     }  
+
 }  
